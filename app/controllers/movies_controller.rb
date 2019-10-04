@@ -34,7 +34,7 @@ class MoviesController < ApplicationController
     # code for storing the session related to the rating selection feature
     if params[:ratings]
       session[:ratings]=params[:ratings]
-    else
+    elsif session[:ratings]
       params[:ratings]=session[:ratings]
       redirect=true
     end

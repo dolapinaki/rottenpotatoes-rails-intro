@@ -24,7 +24,9 @@ class MoviesController < ApplicationController
     
     @all_ratings= Movie.all_ratings 
     @sort_by=params[:sort_by]||session[:sort_by]
-    
+    if(!session[:ratings])
+      session[:ratings]=@all_ratings
+    end
     # code for storing the session related to the rating selection feature
     if params[:ratings]
       session[:ratings]=params[:ratings]
@@ -34,10 +36,10 @@ class MoviesController < ApplicationController
     end
     
     #code for redirecting 
-    #if redirect
-    #  flash.keep
-    #  redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]
-    #end
+    if redirect
+      flash.keep
+      redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]
+    end
     
     @checks=@all_ratings
     if params[:ratings] || session[:ratings]

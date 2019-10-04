@@ -15,9 +15,9 @@ class MoviesController < ApplicationController
     redirect=false #a boolean variable for deciding whether a redirection is required or not
     @all_ratings= Movie.all_ratings 
     
-    if(!session[:ratings])
-      session[:ratings]=@all_ratings
-    end
+    #if(!session[:ratings])
+    #  session[:ratings]=@all_ratings
+    #end
     
     # code for storing the session related to the sort feature
     if (params[:sort_by])
@@ -42,7 +42,7 @@ class MoviesController < ApplicationController
     #code for redirecting 
     if redirect
       flash.keep
-      redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]
+      redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]||all_ratings
     end
     
     @checks=@all_ratings

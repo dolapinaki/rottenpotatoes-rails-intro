@@ -41,7 +41,7 @@ class MoviesController < ApplicationController
     #code for redirecting 
     if redirect
       flash.keep
-      redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]||all_ratings
+      redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]
     end
   
     @movies = Movie.order(params[:sort_by]).where(rating: @checks)

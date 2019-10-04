@@ -22,7 +22,7 @@ class MoviesController < ApplicationController
     # code for storing the session related to the sort feature
     if (params[:sort_by])
       session[:sort_by]=params[:sort_by]
-    else
+    elsif (session[:sort_by])
       params[:sort_by]=session[:sort_by]
       redirect=true
     end
@@ -39,16 +39,17 @@ class MoviesController < ApplicationController
       redirect=true
     end
     
+    @checks=@all_ratings
+    if params[:ratings] || session[:ratings]
+      @checks= params[:ratings].keys || session[:ratings].keys
+    end
+    
     #code for redirecting 
     if redirect
       flash.keep
       redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]||all_ratings
     end
-    
-    @checks=@all_ratings
-    if params[:ratings] || session[:ratings]
-      @checks= params[:ratings].keys || session[:ratings].keys
-    end
+  
     
     @movies = Movie.order(params[:sort_by]).where(rating: @checks)
   end

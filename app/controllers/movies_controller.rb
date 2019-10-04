@@ -11,18 +11,40 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.order(params[:sort_by])
-    if params[:ratings]
-      @movies=Movie.where(:rating=>params[:ratings].keys).order(params[:sort_by])
+    
+    redirect=false #a boolean variable for deciding whether a redirection is required or not
+    
+    # code for storing the session related to the sort feature
+    if (params[:sort_by])
+      session[:sort_by]=params[:sort_by]
+    else
+      params[:sort_by]=session[:sort_by]
+      redirect=true
     end
-    #ratings=params[:ratings].keys
+    
     @all_ratings= Movie.all_ratings 
-    @sort_column = params[:sort_by]
-    ratings=@all_ratings
-    if (params[:ratings]!=nil)
-    ratings=params[:ratings].keys
+    @sort_by=params[:sort_by]||session[:sort_by]
+    
+    # code for storing the session related to the rating selection feature
+    if params[:ratings]
+      session[:ratings]=params[:ratings]
+    else
+      params[:ratings]=session[:ratings]
+      redirect=true
     end
-    @mark=ratings
+    
+    #code for redirecting 
+    if redirect
+      flash.keep
+      redirect_to:sort_by=>params[:sort_by]||session[:sort_by], :ratings=>params[:ratings]||session[:ratings]
+    end
+    
+    @checks=@all_ratings
+    if params[:ratings] || session[:ratings]
+      @checks= params[:ratings].keys || session[:ratings].keys
+    end
+    
+    @movies = Movie.order(params[:sort_by]).where(rating: @checks)
   end
 
   def new
